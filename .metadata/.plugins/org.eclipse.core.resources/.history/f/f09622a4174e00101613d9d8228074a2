@@ -1,0 +1,91 @@
+#include "stm32f4xx.h"
+
+#define GPIOBEN (1U<<1)
+#define I2C1EN	(1U<<21)
+
+#define ADXL345_ADDR 0x53    // 7-bit I2C address (without R/W bit)
+
+int main(void)
+{
+
+
+}
+//PB6 , PB7 AF4
+void i2c1_gpio_init(void)
+{
+	RCC->AHB1ENR |= GPIOBEN;
+
+	GPIOB->MODER &= ~(3U<<(2 * 6));
+	GPIOB->MODER &= ~(3U<<(2 * 7));
+	GPIOB->MODER |= ((2U<<(2 * 6)) | (2U<<(2 * 7)));
+
+	GPIOB->AFR[0] &= ~(0xF<<(4 * 6));
+	GPIOB->AFR[0] &= ~(0xF<<(4 * 7));
+	GPIOB->AFR[0] |= ((4U<<(4 * 6)) | (4U<<(4 * 7)));
+
+	GPIOB->PUPDR &= ~(3U<<(2 * 6));
+	GPIOB->PUPDR &= ~(3U<<(2 * 7));
+	GPIOB->PUPDR |= ((1U<<(2*6)) | (1U<<(2*7)));
+
+	GPIOB->OTYPER |= ((1U<<6) | (1U<<7)); //internal pull up resistor
+}
+
+void i2c1_init(void)
+{
+	// Enable I2C1 clock
+	RCC->APB1ENR |= I2C1EN;
+
+	// Reset I2C1 (the trick is setting and then resetting)
+	I2C1->CR1 |= (1U<<15);
+	I2C1->CR1 &= ~(1U<<15);
+
+	// Configure clock (assuming 16 MHz PCLK1)
+	I2C1->CR2 = 16; // MHz
+
+	// Configure I2C speed
+	I2C1->CCR = 80; // Standard mode (100kHz), 16 MHz / (2 * CCR) = 100kHz
+	I2C1->TRISE = 17;  // Max rise time = (1000ns / 62.5ns) + 1 = 17
+
+	// Enable I2C1
+	I2C1->CR1 |= (1U<<0);
+}
+
+uint8_t i2c_read_register(uint8_t slave_addr , uint8_t reg_addr)
+{
+	uint8_t received;
+
+	// 1. Generate START condition
+	I2C1->CR1 |= (1U<<8);
+	while(!(I2C1->SR1 & (1U<<0))); // Wait for SB=1
+
+	// 2. Send slave address with write (R/W bit = 0)
+	I2C1->DR = (slave_addr<<1); // Write mode
+	while(!(I2C1->SR1 & (1U<<1)));// Wait for ADDR
+	(void)I2C1->SR1;
+	(void)I2C1->SR2;
+
+	// 3. Send the register address we want to read
+	I2C1->DR = reg_addr;
+	while(!(I2C1->SR1 & (1U<<7))); // Wait until data register empty
+
+	// 4. Generate REPEATED START
+	I2C1->CR1 |= (1U<<8);
+	while(!(I2C1->SR1 & (1U<<0))); // Wait for SB
+
+	// 5. Send slave address with read (R/W bit = 1)
+	I2C1->DR = (slave_addr<<1) | 1; // Read mode
+	while(!(I2C1->SR1 & (1U<<1))); // Wait for ADDR
+	(void)I2C1->SR1;
+	(void)I2C1->SR2;
+
+	// 6. Prepare to NACK and stop after reading 1 byte
+	I2C1->CR1 &= ~(1U<<10); // Disable ACK
+	I2C1->CR1 |= (1U<<9);
+
+	// 7. Wait until the data is received
+	while(!(I2C1->SR1 & (1U<<6))); // Wait for RXNE = 1
+	received = I2C1->DR;
+
+	return received;
+
+}

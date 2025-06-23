@@ -1,0 +1,10 @@
+14:27:35 **** Incremental Build of configuration Debug for project PWM_using_UART ****
+make -j4 all 
+arm-none-eabi-size  PWM_using_UART.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1408	      0	   1568	   2976	    ba0	PWM_using_UART.elf
+Finished building: default.size.stdout
+ 
+
+14:27:35 Build Finished. 0 errors, 0 warnings. (took 264ms)
+

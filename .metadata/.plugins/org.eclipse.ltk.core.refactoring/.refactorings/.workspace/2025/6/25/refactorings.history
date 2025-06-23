@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;TIM2_output_compare_4Channels&apos; to &apos;4_Timers_output_compare&apos;" description="Rename resource &apos;TIM2_output_compare_4Channels&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/TIM2_output_compare_4Channels" name="4_Timers_output_compare" stamp="1750209432727" updateReferences="true"/>
+</session>

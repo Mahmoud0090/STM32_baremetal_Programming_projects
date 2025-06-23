@@ -1,0 +1,30 @@
+#include "stm32f4xx.h"
+
+
+#define GPIOBEN		(1U<<1)
+
+int main(void)
+{
+
+
+}
+
+//gpio init for all channels of timer 2
+/*PB8 --> ch1
+ * PB9 --> ch2
+ * PB10 --> ch3
+ * PB11 --> ch4*/
+void tim2_gpio_init()
+{
+	//enable GPIOB clock
+	RCC->AHB1ENR |= GPIOBEN;
+
+	//configure pins mode to be alternative mode
+	GPIOB->MODER &= ~(3U<<(2 * 8));
+	GPIOB->MODER &= ~(3U<<(2 * 9));
+	GPIOB->MODER &= ~(3U<<(2 * 10));
+	GPIOB->MODER &= ~(3U<<(2 * 11));
+
+	GPIOB->MODER |= ((2U<<(2*8))|(2U<<(2*9))|(2U<<(2*10))|(2U<<(2*11)));
+
+}

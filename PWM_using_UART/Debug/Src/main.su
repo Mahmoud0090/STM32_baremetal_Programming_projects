@@ -1,0 +1,9 @@
+../Src/main.c:15:5:main	16	static
+../Src/main.c:40:6:delay_ms	24	static,ignoring_inline_asm
+../Src/main.c:47:6:uart2_init	4	static
+../Src/main.c:60:6:uart2_write	16	static
+../Src/main.c:66:6:uart2_print	16	static
+../Src/main.c:73:6:uart2_print_int	24	static
+../Src/main.c:93:6:uart2_read	4	static
+../Src/main.c:99:6:pwm_init	4	static
+../Src/main.c:117:6:set_pwm_duty	16	static

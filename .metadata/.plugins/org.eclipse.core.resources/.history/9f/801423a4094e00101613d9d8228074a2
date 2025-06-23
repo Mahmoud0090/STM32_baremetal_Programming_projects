@@ -1,0 +1,35 @@
+#include "stm32f4xx.h"
+
+#define GPIOBEN (1U<<1)
+#define I2C1EN	(1U<<21)
+
+int main(void)
+{
+
+
+}
+//PB6 , PB7 AF4
+void i2c1_gpio_init(void)
+{
+	RCC->AHB1ENR |= GPIOBEN;
+
+	GPIOB->MODER &= ~(3U<<(2 * 6));
+	GPIOB->MODER &= ~(3U<<(2 * 7));
+	GPIOB->MODER |= ((2U<<(2 * 6)) | (2U<<(2 * 7)));
+
+	GPIOB->AFR[0] &= ~(0xF<<(4 * 6));
+	GPIOB->AFR[0] &= ~(0xF<<(4 * 7));
+	GPIOB->AFR[0] |= ((4U<<(4 * 6)) | (4U<<(4 * 7)));
+
+	GPIOB->PUPDR &= ~(3U<<(2 * 6));
+	GPIOB->PUPDR &= ~(3U<<(2 * 7));
+	GPIOB->PUPDR |= ((1U<<(2*6)) | (1U<<(2*7)));
+
+	GPIOB->OTYPER |= ((1U<<6) | (1U<<7)); //internal pull up resistor
+}
+
+void i2c1_init(void)
+{
+	RCC->APB1ENR |= I2C1EN;
+
+}

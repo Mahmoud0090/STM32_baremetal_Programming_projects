@@ -1,0 +1,14 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:PWM_LED_brightness_control,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIO_LED,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:PWM_tim3_RGB_color,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:PWM_using_UART,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:basic_UART_TX_RX,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:UART_RX_interrupt,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:UART_RX_TX_interrupt,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:TIM2_input_capture,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:TIM3_output_compare,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:4_Timers_output_compare,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:TIM3_PWM,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:I2C
+eclipse.preferences.version=1
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:4_Timers_output_compare/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:4_Timers_output_compare/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIO_LED/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIO_LED/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:I2C/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:PWM_tim3_rgb/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:TIM2_input_capture/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:UART_RX_TX_interrupt/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:basic_UART_TX_RX/activeLaunchMode=run

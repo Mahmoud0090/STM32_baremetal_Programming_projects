@@ -1,0 +1,27 @@
+#include "stm32f4xx.h"
+
+#define GPIOBEN	(1U<<1)
+
+
+
+/*PWM on TIM3_CH1 (PB4)*/
+int main(void)
+{
+
+
+}
+
+void tim3_gpio_init(void)
+{
+	//enable GPIOB clock
+	RCC->AHB1ENR |= GPIOBEN;
+
+	//configure mode register
+	GPIOB->MODER &= ~(3U<<(2*4));
+	GPIOB->MODER |= (2U<<(2*4));
+
+	//configure AFR register to be (AF2)
+
+	GPIOB->AFR[0] &= (0xF<<(4 * 4));
+
+}

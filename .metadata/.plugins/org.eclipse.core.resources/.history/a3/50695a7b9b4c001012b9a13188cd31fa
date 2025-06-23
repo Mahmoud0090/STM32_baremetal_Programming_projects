@@ -1,0 +1,55 @@
+#include "stm32f4xx.h"
+
+#define GPIOBEN	(1U<<1)
+#define TIM3EN	(1U<<1)
+
+
+void tim3_gpio_init(void);
+void tim3_pwm_init(void);
+
+/*PWM on TIM3_CH1 (PB4)*/
+int main(void)
+{
+	tim3_gpio_init();
+	tim3_pwm_init();
+
+	while(1)
+	{
+
+	}
+}
+
+void tim3_gpio_init(void)
+{
+	//enable GPIOB clock
+	RCC->AHB1ENR |= GPIOBEN;
+
+	//configure mode register
+	GPIOB->MODER &= ~(3U<<(2*4));
+	GPIOB->MODER |= (2U<<(2*4));
+
+	//configure AFR register to be (AF2)
+
+	GPIOB->AFR[0] &= ~(0xF<<(4 * 4));
+	GPIOB->AFR[0] |= (2U<<(4 * 4));
+}
+
+void tim3_pwm_init(void)
+{
+	//enable tim3 clock
+	RCC->APB1ENR |= TIM3EN;
+
+	TIM3->PSC = 16 - 1; //16Mhz/16 = 1Mhz
+	TIM3->ARR = 1000 - 1; // 1Mhz/1000 = 1Khz
+	TIM3->CCR1 = 250; // for 50% duty cycle
+
+	TIM3->CCMR1 &= ~(7U<<4);
+	TIM3->CCMR1 |= (6U<<4);
+	TIM3->CCMR1 |= (1U<<3);
+
+	TIM3->CCER |= (1U<<0);
+
+	TIM3->CR1 |= (1U<<7);
+	TIM3->CR1 |= (1U<<0);
+
+}

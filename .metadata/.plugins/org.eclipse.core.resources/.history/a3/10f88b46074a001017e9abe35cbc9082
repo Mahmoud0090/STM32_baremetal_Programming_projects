@@ -1,0 +1,28 @@
+#include "stm32f4xx.h"
+#include "timer.h"
+#include "uart.h"
+
+extern volatile uint32_t last_capture;
+extern volatile uint32_t frequency;
+
+int main(void)
+{
+	gpio_pa0_input_init();
+	tim2_input_capture_init();
+	uart2_init();
+	uart2_print("the frequency measured is : \n\r");
+
+	while(1)
+	{
+		uart2_print("Freq: ");
+		uart2_print_uint32(frequency);
+		uart2_print(" Hz\r\n");
+
+		for(int i = 0 ; i<1000000 ; i++);
+	}
+}
+
+
+
+
+

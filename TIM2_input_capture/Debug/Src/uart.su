@@ -1,0 +1,4 @@
+../Src/uart.c:10:6:uart2_init	4	static
+../Src/uart.c:35:6:uart2_write	16	static
+../Src/uart.c:42:6:uart2_print	16	static
+../Src/uart.c:50:6:uart2_print_uint32	32	static

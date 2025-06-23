@@ -1,0 +1,121 @@
+#include "stm32f4xx.h"
+
+#define GPIOAEN		(1U<<0)
+#define GPIOBEN		(1U<<1)
+#define TIM2EN		(1U<<0)
+#define TIM3EN		(1U<<1)
+#define TIM4EN		(1U<<2)
+#define TIM5EN		(1U<<3)
+
+void timers_gpio_pins_init();
+void tim2_output_compare_init(void);
+void tim3_output_compare_init(void);
+void tim4_output_compare_init(void);
+void tim5_output_compare_init(void);
+
+
+
+/*timers pins
+ * tim5-ch1 --> PA0 -->AF2
+ * tim4-ch1 --> PB6 -->AF2
+ * tim3-ch1 --> PB4 -->AF2
+ * tim2-ch2 --> PA1 -->AF2*/
+int main(void)
+{
+	timers_gpio_pins_init();
+	tim2_output_compare_init();
+	tim3_output_compare_init();
+	tim4_output_compare_init();
+	tim5_output_compare_init();
+
+	while(1)
+	{
+
+	}
+}
+
+void timers_gpio_pins_init()
+{
+	//enable GPIOA , GPIOB clocks
+	RCC->AHB1ENR |= GPIOAEN;
+	RCC->AHB1ENR |= GPIOBEN;
+
+	//configure pins mode to be alternative mode
+	GPIOB->MODER &= ~(3U<<(2 * 4));
+	GPIOB->MODER &= ~(3U<<(2 * 6));
+	GPIOB->MODER &= ~(3U<<(2 * 8));
+	GPIOA->MODER &= ~(3U<<(2 * 0));
+
+	GPIOB->MODER |= ((2U<<(2*4))|(2U<<(2*6))|(2U<<(2*8)));
+	GPIOA->MODER |= (2U<<(2*0));
+
+	//configure AFR to be AF1 for timer2
+	GPIOB->AFR[0] &= ~(0xF<<(4*4));//PB4
+	GPIOB->AFR[0] &= ~(0xF<<(4*6));//PB6
+	GPIOB->AFR[1] &= ~(0xF<<(4*0));//PB8
+	GPIOA->AFR[0] &= ~(0xF<<(4*0));
+
+	GPIOB->AFR[0] |= ((2U<<(4*4))|(2U<<(4*6)));
+	GPIOB->AFR[1] |= (2U<<(4*0));
+	GPIOA->AFR[0] |= (2U<<(4*0));
+}
+
+void tim2_output_compare_init(void)
+{
+	//enable tim2 clock
+	RCC->APB1ENR |= TIM2EN;
+
+	TIM2->PSC = 1600 - 1; // 16Mhz/1600 = 10Khz
+	TIM2->ARR = 1000 - 1; // for 10hz output
+	TIM2->CCR1= 500;
+	TIM2->CCMR1 &= ~(7U<<4);
+	TIM2->CCMR1 |= (3U<<4);
+	TIM2->CCMR1 |= (1U<<3);
+	TIM2->CCER  |= (1U<<0);
+	TIM2->CR1 	|= (1U<<0);
+}
+
+void tim3_output_compare_init(void)
+{
+	//enable tim3 clock
+	RCC->APB1ENR |= TIM3EN;
+
+	TIM3->PSC = 1600 - 1; //16Mhz/1600 = 10Khz
+	TIM3->ARR = 100 - 1; //for 100 hz output
+	TIM3->CCR1 = 50; //50% duty cycle
+	TIM3->CCMR1 &= ~(7U<<4);
+	TIM3->CCMR1 |= (3U<<4); //011 toggle mode
+	TIM3->CCMR1 |= (1U<<3);//Output compare 1 preload enable
+	TIM3->CCER |= (1U<<0); //Capture/Compare 1 output enable
+	TIM3->CR1 |= (1U<<0); //counter enable
+}
+
+void tim4_output_compare_init(void)
+{
+	//enable tim4 clock
+	RCC->APB1ENR |= TIM4EN;
+
+	TIM4->PSC = 1600 - 1;
+	TIM4->ARR = 40 - 1; //for 250 Hz
+	TIM4->CCR1 = 20;
+	TIM4->CCMR1 &= ~(7U<<4);
+	TIM4->CCMR1 |= (3U<<4);
+	TIM4->CCMR1 |= (1U<<3);
+	TIM4->CCER |= (1U<<0);
+	TIM4->CR1 |= (1U<<0);
+
+}
+void tim5_output_compare_init(void)
+{
+	//enable tim4 clock
+	RCC->APB1ENR |= TIM5EN;
+
+	TIM5->PSC = 1600 - 1;
+	TIM5->ARR = 10 - 1; //for 250 Hz
+	TIM5->CCR1 = 5;
+	TIM5->CCMR1 &= ~(7U<<4);
+	TIM5->CCMR1 |= (3U<<4);
+	TIM5->CCMR1 |= (1U<<3);
+	TIM5->CCER |= (1U<<0);
+	TIM5->CR1 |= (1U<<0);
+}

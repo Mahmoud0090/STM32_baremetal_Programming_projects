@@ -1,0 +1,10 @@
+02:14:57 **** Incremental Build of configuration Debug for project PWM_tim3_RGB_color ****
+make -j4 all 
+arm-none-eabi-size  PWM_tim3_RGB_color.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1108	      0	   1568	   2676	    a74	PWM_tim3_RGB_color.elf
+Finished building: default.size.stdout
+ 
+
+02:14:57 Build Finished. 0 errors, 0 warnings. (took 219ms)
+

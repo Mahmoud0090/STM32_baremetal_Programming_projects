@@ -1,0 +1,51 @@
+#include "stm32f4xx.h"
+
+
+#define GPIOAEN		(1U<<0)
+#define TIM3EN		(1U<<1)
+
+int main(void)
+{
+
+
+
+}
+
+void pa6_tim3_ch1_init(void)
+{
+	//enable gpioa clock
+	RCC->AHB1ENR |= GPIOAEN;
+
+	//configure mode register as alternate func for pa6
+	GPIOA->MODER &= ~(3U<<(2 * 6));
+	GPIOA->MODER |= (2U<<(2 * 6));
+
+
+	//AF2 for tim3-ch1
+	GPIOA->AFR[0] &= ~(0xF << (4 * 6));
+	GPIOA->AFR[0] |= (2U<<(4 * 6));
+
+}
+
+void tim3_output_compare_init(void)
+{
+	//enable TIM3 clock
+	RCC->APB1ENR |= TIM3EN;
+
+	//Set prescaler and ARR for frequency
+	TIM3->PSC = 1600 - 1; // 16 MHz / 1600 = 10 kHz timer clock
+	TIM3->ARR = 10000 - 1; // Timer overflows every 1 second
+
+	// Set output compare value (initial match)
+	TIM3->CCR1 = 5000; // Match after 0.5s to toggle
+
+	// Enable preload for CCR1
+	TIM3->CCMR1 |= (1U << 3);
+
+	// Enable channel 1 output compare
+	TIM3->CCER |= (1U << 0);
+
+	// Enable counter
+	TIM3->CR1 |= (1U << 0);
+
+}

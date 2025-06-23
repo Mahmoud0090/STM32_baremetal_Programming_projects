@@ -1,0 +1,20 @@
+#include "stm32f4xx.h"
+
+#define GPIOBEN (1U<<1)
+
+int main(void)
+{
+
+
+}
+//PB6 , PB7 AF4
+void i2c1_gpio_init(void)
+{
+	RCC->AHB1ENR |= GPIOBEN;
+
+	GPIOB->MODER &= ~(3U<<(2 * 6));
+	GPIOB->MODER &= ~(3U<<(2 * 7));
+	GPIOB->MODER |= (2U<<(2 * 6));
+	GPIOB->MODER |= (2U<<(2 * 7));
+
+}

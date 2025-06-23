@@ -1,0 +1,47 @@
+#include "stm32f4xx.h"
+
+
+#define GPIOBEN		(1U<<1)
+#define TIM2EN		(1U<<0)
+
+int main(void)
+{
+
+
+}
+
+//gpio init for all channels of timer 2
+/*PB8 --> ch1
+ * PB9 --> ch2
+ * PB10 --> ch3
+ * PB11 --> ch4*/
+void tim2_gpio_pins_init()
+{
+	//enable GPIOB clock
+	RCC->AHB1ENR |= GPIOBEN;
+
+	//configure pins mode to be alternative mode
+	GPIOB->MODER &= ~(3U<<(2 * 8));
+	GPIOB->MODER &= ~(3U<<(2 * 9));
+	GPIOB->MODER &= ~(3U<<(2 * 10));
+	GPIOB->MODER &= ~(3U<<(2 * 11));
+
+	GPIOB->MODER |= ((2U<<(2*8))|(2U<<(2*9))|(2U<<(2*10))|(2U<<(2*11)));
+
+	//configure AFR to be AF1 for timer2
+	GPIOB->AFR[1] &= ~(0xF<<(4*0));
+	GPIOB->AFR[1] &= ~(0xF<<(4*1));
+	GPIOB->AFR[1] &= ~(0xF<<(4*2));
+	GPIOB->AFR[1] &= ~(0xF<<(4*3));
+
+	GPIOB->AFR[1] |= ((1U<<(4*0))|(1U<<(4*1))|(1U<<(4*2))|(1U<<(4*3)));
+
+}
+
+void tim2_output_compare_4channels_init(void)
+{
+	//enable tim2 clock
+
+
+
+}
