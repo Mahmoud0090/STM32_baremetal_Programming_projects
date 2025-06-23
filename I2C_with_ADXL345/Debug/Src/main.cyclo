@@ -1,0 +1,9 @@
+../Src/main.c:19:5:main	3
+../Src/main.c:51:6:i2c1_gpio_init	1
+../Src/main.c:74:6:i2c1_init	1
+../Src/main.c:96:9:i2c1_read_register	7
+../Src/main.c:133:6:i2c1_write_register	5
+../Src/main.c:152:6:read_accel_xyz	2
+../Src/main.c:163:6:uart2_init	1
+../Src/main.c:179:6:uart2_write	2
+../Src/main.c:185:6:uart2_print	2
