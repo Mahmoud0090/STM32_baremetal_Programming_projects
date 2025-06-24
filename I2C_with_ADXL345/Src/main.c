@@ -10,6 +10,7 @@ void i2c1_init(void);
 uint8_t i2c1_read_register(uint8_t slave_addr, uint8_t reg_addr);
 void i2c1_write_register(uint8_t slave_addr, uint8_t reg_addr, uint8_t data);
 void read_accel_xyz(int16_t* x, int16_t* y, int16_t* z);
+float convert_to_mps2(int16_t raw);
 
 void uart2_init(void);
 void uart2_write(char c);
@@ -30,17 +31,19 @@ int main(void)
 	else
 		uart2_print("Device ID mismatch!\r\n");
 
-	char buffer[64];
+	char buffer[100];
 	int16_t x, y, z;
 
 	while (1)
 	{
+		/*1g = 256LSB = 9.8m/s^2 the earth gravity*/
 		read_accel_xyz(&x, &y, &z);
 
 		sprintf(buffer, "X: %d  Y: %d  Z: %d\r\n", x, y, z);
+
 		uart2_print(buffer);
 
-		for (volatile int i = 0; i < 100000; i++); // Delay
+		for (volatile int i = 0; i < 200000; i++); // Delay
 	}
 }
 
@@ -157,6 +160,11 @@ void read_accel_xyz(int16_t* x , int16_t*y , int16_t* z)
 	*x = ((int16_t)data[1] << 8) | data[0];
 	*y = ((int16_t)data[3] << 8) | data[2];
 	*z = ((int16_t)data[5] << 8) | data[4];
+}
+
+float convert_to_mps2(int16_t raw)
+{
+    return raw * (9.81f / 256.0f); // Convert LSB to m/s²
 }
 
 void uart2_init(void)

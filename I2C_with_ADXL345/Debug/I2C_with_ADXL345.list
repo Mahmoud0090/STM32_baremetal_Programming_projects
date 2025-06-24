@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00003050  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000007bf  00000000  00000000  00003080  2**0
+ 12 .debug_info   000007ed  00000000  00000000  00003080  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00000297  00000000  00000000  0000383f  2**0
+ 13 .debug_abbrev 00000298  00000000  00000000  0000386d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000000a8  00000000  00000000  00003ad8  2**3
+ 14 .debug_aranges 000000b0  00000000  00000000  00003b08  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 00000074  00000000  00000000  00003b80  2**0
+ 15 .debug_rnglists 0000007a  00000000  00000000  00003bb8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00019930  00000000  00000000  00003bf4  2**0
+ 16 .debug_macro  00019930  00000000  00000000  00003c32  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00000fdb  00000000  00000000  0001d524  2**0
+ 17 .debug_line   00000ff5  00000000  00000000  0001d562  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008f033  00000000  00000000  0001e4ff  2**0
+ 18 .debug_str    0008f043  00000000  00000000  0001e557  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000ad532  2**0
+ 19 .comment      00000043  00000000  00000000  000ad59a  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000006e8  00000000  00000000  000ad578  2**2
+ 20 .debug_frame  00000710  00000000  00000000  000ad5e0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000004c  00000000  00000000  000adc60  2**0
+ 21 .debug_line_str 0000004c  00000000  00000000  000adcf0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -146,7 +146,7 @@ void uart2_print(char* s);
 int main(void)
 {
  80002b0:	b580      	push	{r7, lr}
- 80002b2:	b096      	sub	sp, #88	@ 0x58
+ 80002b2:	b0a0      	sub	sp, #128	@ 0x80
  80002b4:	af02      	add	r7, sp, #8
 	i2c1_gpio_init();
  80002b6:	f000 f84b 	bl	8000350 <i2c1_gpio_init>
@@ -167,9 +167,9 @@ int main(void)
  80002ce:	2053      	movs	r0, #83	@ 0x53
  80002d0:	f000 f8b8 	bl	8000444 <i2c1_read_register>
  80002d4:	4603      	mov	r3, r0
- 80002d6:	f887 304f 	strb.w	r3, [r7, #79]	@ 0x4f
+ 80002d6:	f887 3077 	strb.w	r3, [r7, #119]	@ 0x77
 	if (device_id == 0xE5)
- 80002da:	f897 304f 	ldrb.w	r3, [r7, #79]	@ 0x4f
+ 80002da:	f897 3077 	ldrb.w	r3, [r7, #119]	@ 0x77
  80002de:	2be5      	cmp	r3, #229	@ 0xe5
  80002e0:	d103      	bne.n	80002ea <main+0x3a>
 		uart2_print("ADXL345 detected!\r\n");
@@ -180,52 +180,52 @@ int main(void)
 		uart2_print("Device ID mismatch!\r\n");
  80002ea:	4816      	ldr	r0, [pc, #88]	@ (8000344 <main+0x94>)
  80002ec:	f000 f9f6 	bl	80006dc <uart2_print>
-	char buffer[64];
 	int16_t x, y, z;
 
 	while (1)
 	{
+		/*1g = 256LSB = 9.8m/s^2 the earth gravity*/
 		read_accel_xyz(&x, &y, &z);
- 80002f0:	1dba      	adds	r2, r7, #6
- 80002f2:	f107 0108 	add.w	r1, r7, #8
- 80002f6:	f107 030a 	add.w	r3, r7, #10
- 80002fa:	4618      	mov	r0, r3
- 80002fc:	f000 f956 	bl	80005ac <read_accel_xyz>
+ 80002f0:	f107 020a 	add.w	r2, r7, #10
+ 80002f4:	f107 010c 	add.w	r1, r7, #12
+ 80002f8:	f107 030e 	add.w	r3, r7, #14
+ 80002fc:	4618      	mov	r0, r3
+ 80002fe:	f000 f955 	bl	80005ac <read_accel_xyz>
 
 		sprintf(buffer, "X: %d  Y: %d  Z: %d\r\n", x, y, z);
- 8000300:	f9b7 300a 	ldrsh.w	r3, [r7, #10]
- 8000304:	461a      	mov	r2, r3
- 8000306:	f9b7 3008 	ldrsh.w	r3, [r7, #8]
- 800030a:	4619      	mov	r1, r3
- 800030c:	f9b7 3006 	ldrsh.w	r3, [r7, #6]
- 8000310:	f107 000c 	add.w	r0, r7, #12
- 8000314:	9300      	str	r3, [sp, #0]
- 8000316:	460b      	mov	r3, r1
- 8000318:	490b      	ldr	r1, [pc, #44]	@ (8000348 <main+0x98>)
- 800031a:	f000 fa55 	bl	80007c8 <siprintf>
-		uart2_print(buffer);
- 800031e:	f107 030c 	add.w	r3, r7, #12
- 8000322:	4618      	mov	r0, r3
- 8000324:	f000 f9da 	bl	80006dc <uart2_print>
+ 8000302:	f9b7 300e 	ldrsh.w	r3, [r7, #14]
+ 8000306:	461a      	mov	r2, r3
+ 8000308:	f9b7 300c 	ldrsh.w	r3, [r7, #12]
+ 800030c:	4619      	mov	r1, r3
+ 800030e:	f9b7 300a 	ldrsh.w	r3, [r7, #10]
+ 8000312:	f107 0010 	add.w	r0, r7, #16
+ 8000316:	9300      	str	r3, [sp, #0]
+ 8000318:	460b      	mov	r3, r1
+ 800031a:	490b      	ldr	r1, [pc, #44]	@ (8000348 <main+0x98>)
+ 800031c:	f000 fa54 	bl	80007c8 <siprintf>
 
-		for (volatile int i = 0; i < 100000; i++); // Delay
- 8000328:	2300      	movs	r3, #0
- 800032a:	603b      	str	r3, [r7, #0]
- 800032c:	e002      	b.n	8000334 <main+0x84>
- 800032e:	683b      	ldr	r3, [r7, #0]
- 8000330:	3301      	adds	r3, #1
- 8000332:	603b      	str	r3, [r7, #0]
- 8000334:	683b      	ldr	r3, [r7, #0]
- 8000336:	4a05      	ldr	r2, [pc, #20]	@ (800034c <main+0x9c>)
- 8000338:	4293      	cmp	r3, r2
- 800033a:	ddf8      	ble.n	800032e <main+0x7e>
+		uart2_print(buffer);
+ 8000320:	f107 0310 	add.w	r3, r7, #16
+ 8000324:	4618      	mov	r0, r3
+ 8000326:	f000 f9d9 	bl	80006dc <uart2_print>
+
+		for (volatile int i = 0; i < 200000; i++); // Delay
+ 800032a:	2300      	movs	r3, #0
+ 800032c:	607b      	str	r3, [r7, #4]
+ 800032e:	e002      	b.n	8000336 <main+0x86>
+ 8000330:	687b      	ldr	r3, [r7, #4]
+ 8000332:	3301      	adds	r3, #1
+ 8000334:	607b      	str	r3, [r7, #4]
+ 8000336:	687b      	ldr	r3, [r7, #4]
+ 8000338:	4a04      	ldr	r2, [pc, #16]	@ (800034c <main+0x9c>)
+ 800033a:	4293      	cmp	r3, r2
+ 800033c:	ddf8      	ble.n	8000330 <main+0x80>
 		read_accel_xyz(&x, &y, &z);
- 800033c:	e7d8      	b.n	80002f0 <main+0x40>
- 800033e:	bf00      	nop
+ 800033e:	e7d7      	b.n	80002f0 <main+0x40>
  8000340:	08001110 	.word	0x08001110
  8000344:	08001124 	.word	0x08001124
  8000348:	0800113c 	.word	0x0800113c
- 800034c:	0001869f 	.word	0x0001869f
+ 800034c:	00030d3f 	.word	0x00030d3f
 
 08000350 <i2c1_gpio_init>:
 
@@ -674,6 +674,9 @@ void read_accel_xyz(int16_t* x , int16_t*y , int16_t* z)
  8000626:	bd80      	pop	{r7, pc}
 
 08000628 <uart2_init>:
+{
+    return raw * (9.81f / 256.0f); // Convert LSB to m/s²
+}
 
 void uart2_init(void)
 {
