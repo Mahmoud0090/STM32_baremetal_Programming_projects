@@ -1,0 +1,8 @@
+../Src/main.c:19:5:main	16	static
+../Src/main.c:39:6:spi1_gpio_init	4	static
+../Src/main.c:55:6:spi1_init	4	static
+../Src/main.c:70:9:spi1_transfer	16	static
+../Src/main.c:79:9:adxl345_read_register	24	static
+../Src/main.c:90:6:uart2_init	4	static
+../Src/main.c:106:6:uart2_write	16	static
+../Src/main.c:112:6:uart2_print	16	static
