@@ -1,6 +1,18 @@
 #include "stm32f4xx.h"
 #include <stdio.h>
 
+
+/* Hardware connection
+ * | ADXL345 Pin | Connect To (STM32) |
+| ----------- | ------------------ |
+| VCC         | 3.3V               |
+| GND         | GND                |
+| CS          | PA4                |
+| SCL (SCK)   | PA5 (SPI1\_SCK)    |
+| SDA (MOSI)  | PA7 (SPI1\_MOSI)   |
+| SDO (MISO)  | PA6 (SPI1\_MISO)   |*/
+
+
 #define CS_LOW()	(GPIOA->ODR &= ~(1U<<4))
 #define CS_HIGH()	(GPIOA->ODR |= (1U<<4))
 
