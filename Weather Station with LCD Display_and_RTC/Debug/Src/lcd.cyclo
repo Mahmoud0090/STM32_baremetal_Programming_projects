@@ -1,0 +1,8 @@
+../Src/lcd.c:16:6:lcd_init	1
+../Src/lcd.c:34:6:lcd_clear	1
+../Src/lcd.c:39:6:lcd_set_cursor	1
+../Src/lcd.c:44:6:lcd_send_string	2
+../Src/lcd.c:50:13:lcd_send_cmd	1
+../Src/lcd.c:55:13:lcd_send_data	1
+../Src/lcd.c:60:13:lcd_write_nibble	1
+../Src/lcd.c:64:13:lcd_toggle	1

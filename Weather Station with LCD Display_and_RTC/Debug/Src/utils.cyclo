@@ -1,0 +1,2 @@
+../Src/utils.c:3:9:bcd_to_decimal	1
+../Src/utils.c:8:9:decimal_to_bcd	1

@@ -1,0 +1,2 @@
+../Src/rtc.c:5:6:rtc_init	1
+../Src/rtc.c:11:6:rtc_get_time	1

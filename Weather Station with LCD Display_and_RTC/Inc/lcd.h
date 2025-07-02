@@ -1,13 +1,11 @@
-/*
- * lcd.h
- *
- *  Created on: Jun 29, 2025
- *      Author: User
- */
+#ifndef LCD_H
+#define LCD_H
 
-#ifndef LCD_H_
-#define LCD_H_
+#include <stdint.h>
 
+void lcd_init(void);
+void lcd_clear(void);
+void lcd_send_string(const char* str);
+void lcd_set_cursor(uint8_t row, uint8_t col);
 
-
-#endif /* LCD_H_ */
+#endif

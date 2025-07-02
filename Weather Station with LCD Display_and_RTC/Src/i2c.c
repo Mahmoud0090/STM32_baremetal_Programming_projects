@@ -1,80 +1,76 @@
 #include "i2c.h"
-#include "stm32f4xx.h"
+#include "delay.h"  // You must provide delay_us()
 
+#define I2C_GPIO GPIOB
 #define SDA_PIN 7
 #define SCL_PIN 6
-#define I2C_TIMEOUT	100000
 
-static volatile uint32_t timeout;
-
-void i2c_init(void)
-{
-	//enable GPIOA and I2C1 clocks
-	RCC->AHB1ENR |= (1U<<1);
-	RCC->APB1ENR |= (1U<<21);
-
-	//configure mode
-	GPIOB->MODER &= ~((3U<<(2*SCL_PIN)) | (3U<<(2*SDA_PIN)));
-	GPIOB->MODER |= ((2U<<(2*SCL_PIN)) | (2U<<(2*SDA_PIN))); //AF mode
-
-	GPIOB->AFR[0] &= ~((0xF<<(4*SCL_PIN)) | (0xF<<(4*SDA_PIN)));
-	GPIOB->AFR[0] |= (4U<<(4*SCL_PIN) | (4U<<(4*SDA_PIN))); //AF4
-
-	GPIOB->OTYPER |= ((1U<<SCL_PIN) | (1U<<SDA_PIN)); //open drain
-
-	GPIOB->OSPEEDR |= ((3U<<(2*SCL_PIN)) | (3U<<(2*SDA_PIN))); // high speed
-
-	GPIOB->PUPDR |= ~((3U<<(2*SCL_PIN)) | (3U<<(2*SDA_PIN))); //no pu/pd
-
-	I2C1->CR1 = (1U<<15); //SWRST
-	I2C1->CR1 = 0;
-	I2C1->CR2 = 16; // PCLK1 = 16 MHz
-	I2C1->CCR = 80; // Standard mode ~100 kHz
-	I2C1->TRISE = 17; // TRISE = max rise time
-	I2C1->CR1 |= (1U<<0); // enable I2C peripheral
+static void i2c_delay(void) {
+    delay_us(5); // ~100 kHz I2C
 }
 
-static int wait_flag(uint16_t flag)
-{
-	timeout = I2C_TIMEOUT;
-	while(!(I2C1->SR & flag) && --timeout);
-	return timeout != 0;
+static void sda_output(void) {
+    I2C_GPIO->MODER &= ~(3U << (2 * SDA_PIN));
+    I2C_GPIO->MODER |=  (1U << (2 * SDA_PIN)); // Output
 }
 
-void i2c_start(void)
-{
-	I2C1->CR1 |= (1U<<8); //start bit
-	wait_flag((1U<<0)); //SB bit in SR
+static void sda_input(void) {
+    I2C_GPIO->MODER &= ~(3U << (2 * SDA_PIN)); // Input
 }
 
-void i2c_restart(void)
-{
-	I2C1->CR1 |= (1U<<8); //start bit;
-	wait_flag((1U<<0));
+static void scl_high(void) {
+    I2C_GPIO->BSRR = (1U << SCL_PIN);
 }
 
-void i2c_stop(void)
-{
-    I2C1->CR1 |= (1U<<9); //stop bit
+static void scl_low(void) {
+    I2C_GPIO->BSRR = (1U << (SCL_PIN + 16));
 }
 
-void i2c_write(uint8_t data)
-{
-	I2C1->DR = data;
-	wait_flag((1U<<7)); //TXE
-	wait_flag((1U<<2)); //BTF (byte transfer finished)
+static void sda_high(void) {
+    I2C_GPIO->BSRR = (1U << SDA_PIN);
 }
 
-uint8_t i2c_read_ack(void)
-{
-	I2C1->CR1 |= (1U<<10); //ack bit
-	wait_flag((1U<<6)); //RXNE
-	return I2C1->DR;
+static void sda_low(void) {
+    I2C_GPIO->BSRR = (1U << (SDA_PIN + 16));
 }
 
-uint8_t i2c_read_nack(void)
-{
-	I2C1->CR1 &= ~(1U<<10); //ack bit
-	wait_flag((1U<<6)); //RXNE
-	return I2C1->DR;
+void i2c_init(void) {
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+
+    I2C_GPIO->MODER &= ~((3U << (2 * SDA_PIN)) | (3U << (2 * SCL_PIN)));
+    I2C_GPIO->MODER |=  ((1U << (2 * SDA_PIN)) | (1U << (2 * SCL_PIN))); // Output
+
+    I2C_GPIO->OTYPER |= (1U << SDA_PIN) | (1U << SCL_PIN);  // Open-drain
+    I2C_GPIO->PUPDR &= ~((3U << (2 * SDA_PIN)) | (3U << (2 * SCL_PIN))); // No pull
+    I2C_GPIO->PUPDR |=  ((1U << (2 * SDA_PIN)) | (1U << (2 * SCL_PIN))); // Pull-up
+
+    sda_high();
+    scl_high();
+}
+
+void i2c_start(void) {
+    sda_high(); scl_high(); i2c_delay();
+    sda_low();  i2c_delay();
+    scl_low();  i2c_delay();
+}
+
+void i2c_stop(void) {
+    scl_low();  sda_low(); i2c_delay();
+    scl_high(); i2c_delay();
+    sda_high(); i2c_delay();
+}
+
+uint8_t i2c_write(uint8_t data) {
+    for (int i = 0; i < 8; i++) {
+        if (data & 0x80) sda_high(); else sda_low();
+        scl_high(); i2c_delay();
+        scl_low();  i2c_delay();
+        data <<= 1;
+    }
+
+    // ACK bit
+    sda_input(); scl_high(); i2c_delay();
+    uint8_t ack = !(I2C_GPIO->IDR & (1U << SDA_PIN));
+    scl_low(); sda_output(); i2c_delay();
+    return ack;
 }

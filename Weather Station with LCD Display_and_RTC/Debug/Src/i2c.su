@@ -1,0 +1,11 @@
+../Src/i2c.c:8:13:i2c_delay	8	static
+../Src/i2c.c:12:13:sda_output	4	static
+../Src/i2c.c:17:13:sda_input	4	static
+../Src/i2c.c:21:13:scl_high	4	static
+../Src/i2c.c:25:13:scl_low	4	static
+../Src/i2c.c:29:13:sda_high	4	static
+../Src/i2c.c:33:13:sda_low	4	static
+../Src/i2c.c:37:6:i2c_init	8	static
+../Src/i2c.c:51:6:i2c_start	8	static
+../Src/i2c.c:57:6:i2c_stop	8	static
+../Src/i2c.c:63:9:i2c_write	24	static

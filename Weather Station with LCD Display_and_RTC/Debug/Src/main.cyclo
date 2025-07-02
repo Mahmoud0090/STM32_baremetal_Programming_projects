@@ -1,0 +1,5 @@
+../Src/main.c:24:7:thermistor_get_temp	1
+../Src/main.c:35:5:main	1
+../Src/main.c:72:6:uart2_init	1
+../Src/main.c:88:6:uart2_write	2
+../Src/main.c:94:6:uart2_print	2
