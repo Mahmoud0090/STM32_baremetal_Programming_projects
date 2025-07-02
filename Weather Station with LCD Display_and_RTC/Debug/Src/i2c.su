@@ -9,3 +9,6 @@
 ../Src/i2c.c:51:6:i2c_start	8	static
 ../Src/i2c.c:57:6:i2c_stop	8	static
 ../Src/i2c.c:63:9:i2c_write	24	static
+../Src/i2c.c:78:6:i2c_restart	8	static
+../Src/i2c.c:84:9:i2c_read_ack	16	static
+../Src/i2c.c:100:9:i2c_read_nack	16	static

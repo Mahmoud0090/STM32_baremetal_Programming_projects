@@ -74,3 +74,41 @@ uint8_t i2c_write(uint8_t data) {
     scl_low(); sda_output(); i2c_delay();
     return ack;
 }
+
+void i2c_restart(void) {
+    sda_high(); scl_high(); i2c_delay();  // Release lines
+    sda_low();  i2c_delay();              // Start condition again
+    scl_low();  i2c_delay();
+}
+
+uint8_t i2c_read_ack(void) {
+    uint8_t data = 0;
+    // Read one byte and ACK
+    for (int i = 0; i < 8; i++) {
+        scl_high(); delay_us(2);
+        data = (data << 1) | ((GPIOB->IDR >> 7) & 0x01); // SDA on PB7
+        scl_low(); delay_us(2);
+    }
+    // Send ACK
+    sda_output(); sda_low();
+    scl_high(); delay_us(2);
+    scl_low(); delay_us(2);
+    sda_high();  // Release
+    return data;
+}
+
+uint8_t i2c_read_nack(void) {
+    uint8_t data = 0;
+    // Read one byte and NACK
+    for (int i = 0; i < 8; i++) {
+        scl_high(); delay_us(2);
+        data = (data << 1) | ((GPIOB->IDR >> 7) & 0x01);
+        scl_low(); delay_us(2);
+    }
+    // Send NACK
+    sda_output(); sda_high();
+    scl_high(); delay_us(2);
+    scl_low(); delay_us(2);
+    return data;
+}
+

@@ -9,3 +9,6 @@
 ../Src/i2c.c:51:6:i2c_start	1
 ../Src/i2c.c:57:6:i2c_stop	1
 ../Src/i2c.c:63:9:i2c_write	3
+../Src/i2c.c:78:6:i2c_restart	1
+../Src/i2c.c:84:9:i2c_read_ack	2
+../Src/i2c.c:100:9:i2c_read_nack	2
