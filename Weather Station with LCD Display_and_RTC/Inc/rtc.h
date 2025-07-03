@@ -18,5 +18,6 @@ typedef struct{
 
 void rtc_init(void);
 void rtc_get_time(RTC_Time* time);
+void rtc_set_time(RTC_Time* time);
 
 #endif /* RTC_H_ */

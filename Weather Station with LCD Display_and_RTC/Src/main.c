@@ -61,6 +61,9 @@ int main(void)
 	uart2_init();
 	adc_init();       // for thermistor
 
+	RTC_Time set_time = { .hours = 18, .minutes = 50, .seconds = 0 };// put here actual time
+	rtc_set_time(&set_time);
+
     while (1)
     {
     	adc_val = adc_read(1);

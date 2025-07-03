@@ -1,2 +1,3 @@
-../Src/rtc.c:5:6:rtc_init	4	static
-../Src/rtc.c:11:6:rtc_get_time	16	static
+../Src/rtc.c:7:6:rtc_init	4	static
+../Src/rtc.c:13:6:rtc_get_time	24	static
+../Src/rtc.c:32:6:rtc_set_time	16	static
