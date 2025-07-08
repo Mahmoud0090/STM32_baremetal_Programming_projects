@@ -1,0 +1,2 @@
+../Src/adc.c:4:6:adc_init	4	static
+../Src/adc.c:17:10:adc_read	16	static

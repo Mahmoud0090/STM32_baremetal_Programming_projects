@@ -1,0 +1,4 @@
+../Src/max7219.c:10:6:max7219_send	1
+../Src/max7219.c:17:6:max7219_init	1
+../Src/max7219.c:26:6:max7219_clear	2
+../Src/max7219.c:45:6:max7219_draw_dot	3

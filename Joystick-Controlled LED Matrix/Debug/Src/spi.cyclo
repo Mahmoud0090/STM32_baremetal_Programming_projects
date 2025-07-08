@@ -1,0 +1,2 @@
+../Src/spi.c:4:6:spi1_init	1
+../Src/spi.c:20:6:spi1_write	3

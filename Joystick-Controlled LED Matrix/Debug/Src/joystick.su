@@ -1,0 +1,2 @@
+../Src/joystick.c:7:6:joystick_init	8	static
+../Src/joystick.c:11:6:joystick_get_position	32	static
