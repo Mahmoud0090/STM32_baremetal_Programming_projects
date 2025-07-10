@@ -1,0 +1,7 @@
+../Src/clock.c:6:13:wait_until_set	16	static
+../Src/clock.c:12:6:clock_config_hsi_16mhz	8	static
+../Src/clock.c:21:6:clock_config_hse_8mhz	8	static
+../Src/clock.c:34:6:clock_config_pll_84mhz	8	static
+../Src/clock.c:68:10:get_sysclk_freq	4	static
+../Src/clock.c:77:10:get_apb1_freq	16	static
+../Src/clock.c:90:10:get_apb2_freq	16	static
